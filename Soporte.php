@@ -31,8 +31,8 @@ class Soporte
 
     public function muestraResumen()
     {
-        echo "Titulo: " . $this->titulo . "\n";
-        echo "Numero: " . $this->numero . "\n";
-        echo "Precio: " . $this->precio . "(IVA no incluido)\n";
+        echo "<br>Titulo: " . $this->titulo . "<br>";
+        echo "Numero: " . $this->numero . "<br>";
+        echo "Precio: " . $this->precio . "(IVA no incluido)<br>";
     }
 }
