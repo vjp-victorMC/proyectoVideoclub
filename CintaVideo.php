@@ -1,4 +1,5 @@
 <?php
+// ejercicio 323 del projecto
 include_once "Soporte.php";
 
 class CintaVideo extends Soporte
@@ -26,4 +27,6 @@ class CintaVideo extends Soporte
         echo "<br>Precio con IVA: " . $this->getPrecioConIva() . " euros";
     }
 }
+// ejercicio terminado sigue 324
+
 ?>
