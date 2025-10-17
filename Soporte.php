@@ -1,9 +1,9 @@
 <?php
 class Soporte
 {
-    public $titulo;
-    public $numero;
-    public $precio;
+    private $titulo;
+    private $numero;
+    private $precio;
 
     const IVA = 21;
 
@@ -14,14 +14,9 @@ class Soporte
         $this->precio = $precio;
     }
 
-    public function getPrecio()
+    public function getTitulo()
     {
-        return $this->precio;
-    }
-    public function getPrecioConIva()
-    {
-        $precioConIva = $this->precio;
-        return $precioConIva += $precioConIva * self::IVA / 100;
+        return $this->titulo;
     }
 
     public function getNumero()
@@ -29,10 +24,21 @@ class Soporte
         return $this->numero;
     }
 
+    public function getPrecio()
+    {
+        return $this->precio;
+    }
+
+    public function getPrecioConIva()
+    {
+        return $this->precio * (1 + self::IVA / 100);
+    }
+
     public function muestraResumen()
     {
-        echo "<br>Titulo: " . $this->titulo . "<br>";
-        echo "Numero: " . $this->numero . "<br>";
-        echo "Precio: " . $this->precio . "(IVA no incluido)<br>";
+        echo "<br>Título: " . $this->titulo . "<br>";
+        echo "Número: " . $this->numero . "<br>";
+        echo "Precio: " . $this->precio . " (IVA no incluido)<br>";
     }
 }
+?>
