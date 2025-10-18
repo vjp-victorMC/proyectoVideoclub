@@ -16,17 +16,24 @@ class Juego extends Soporte
         $this->maxNumJugadores = $maxNumJugadores;
     }
 
-    // Método que muestra el rango de jugadores posibles
-    public function muestraJugadoresPosibles()
-    {
-        if ($this->minNumJugadores == 1 && $this->maxNumJugadores == 1) {
-            echo "Para un jugador";
-        } elseif ($this->minNumJugadores == $this->maxNumJugadores) {
-            echo "Para " . $this->minNumJugadores . " jugadores";
-        } else {
-            echo "De " . $this->minNumJugadores . " a " . $this->maxNumJugadores . " jugadores";
-        }
+   public function muestraJugadoresPosibles()
+{
+    $min = $this->minNumJugadores;
+    $max = $this->maxNumJugadores;
+
+    // Caso 1: solo en caso de jugador
+    if ($min == 1 && $max == 1) {
+        echo "Para un jugador";
     }
+    // para el mismo numero de jugadores minimo dos maximo dos o tres y tres etc.. 
+    elseif ($min == $max) {
+        echo "Para $min jugadores";
+    }
+    // Caso 3: hay un rango (por ejemplo, de 2 a 4 jugadores)
+    else {
+        echo "De $min a $max jugadores";
+    }
+}
 
     // Sobrescribimos el metodo muestraResumen
     public function muestraResumen()
