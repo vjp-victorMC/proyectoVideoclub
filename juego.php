@@ -29,7 +29,7 @@ class Juego extends Soporte
     elseif ($min == $max) {
         echo "Para $min jugadores";
     }
-    // Caso 3: hay un rango (por ejemplo, de 2 a 4 jugadores)
+    // Caso 3: hay un rango ejemplo de 2 a 4 jugadores
     else {
         echo "De $min a $max jugadores";
     }
