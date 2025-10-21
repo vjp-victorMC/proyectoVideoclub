@@ -12,7 +12,7 @@ abstract class Soporte implements Resumible
     private $titulo;
     private $numero;
     private $precio;
-    public $alquilado=false;
+    public $alquilado = false;
 
     const IVA = 21;
 

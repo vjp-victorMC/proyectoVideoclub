@@ -1,7 +1,6 @@
 <?php
 
 namespace Dwes\ProyectoVideoclub;
-// ejercicio 323 del projecto
 
 class CintaVideo extends Soporte
 {
@@ -25,7 +24,4 @@ class CintaVideo extends Soporte
         echo "<br>Duración: " . $this->duracion . " minutos";
         echo "<br>Precio con IVA: " . $this->getPrecioConIva() . " euros";
     }
-}    
-// ejercicio terminado sigue 324
-
-?>
+}

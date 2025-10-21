@@ -24,7 +24,6 @@ $miDvd->muestraResumen();
 
 // Probando Juego
 
-include "Juego.php";
 
 $miJuego = new Juego("<br>The Last of Us Part II", 26, 49.99, "PS4", 2, 10);
 echo "<strong>" . $miJuego->getTitulo() . "</strong>";

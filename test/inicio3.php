@@ -1,5 +1,4 @@
 <?php
-// v0.331
 require_once __DIR__ . '/../autoload.php';
 
 use Dwes\ProyectoVideoclub\Videoclub;
