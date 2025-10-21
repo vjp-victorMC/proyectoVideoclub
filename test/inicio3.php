@@ -38,9 +38,10 @@ echo "Mostrando Socios: <br>";
 
 $vc->listarSocios();
 
-
-echo "Mostrando Socios después de devolver";
-
 $vc->devolverSocioProducto(1, 2);
 
 $vc->devolverSocioProductos(1, [2, 3]);
+
+echo "<br>Mostrando Socios después de devolver";
+
+$vc->listarSocios();
