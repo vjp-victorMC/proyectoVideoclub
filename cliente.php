@@ -24,7 +24,7 @@ class Cliente
         return $this->numero;
     }
 
-    
+
     public function setNumero($numero)
     {
         $this->numero = $numero;
@@ -44,7 +44,7 @@ class Cliente
     }
 
     // Comprobamos si un soporte ya esta alquilado por el cliente
-    public function tieneAlquilado(Soporte $s)
+    public function tieneAlquilado(Soporte $s): bool
     {
         foreach ($this->soportesAlquilados as $soporte) {
             if ($soporte->getNumero() == $s->getNumero()) {
@@ -77,7 +77,7 @@ class Cliente
     }
 
     // Devolvemos un soporte
-    public function devolver($numSoporte)
+    public function devolver(int $numSoporte)
     {
         foreach ($this->soportesAlquilados as $i => $soporte) {
             if ($soporte->getNumero() == $numSoporte) {
@@ -107,4 +107,3 @@ class Cliente
         }
     }
 }
-?>

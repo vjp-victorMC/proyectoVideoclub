@@ -16,35 +16,32 @@ class Juego extends Soporte
         $this->maxNumJugadores = $maxNumJugadores;
     }
 
-   public function muestraJugadoresPosibles()
-{
-    $min = $this->minNumJugadores;
-    $max = $this->maxNumJugadores;
+    public function muestraJugadoresPosibles()
+    {
+        $min = $this->minNumJugadores;
+        $max = $this->maxNumJugadores;
 
-    // Caso 1: solo en caso de jugador
-    if ($min == 1 && $max == 1) {
-        echo "Para un jugador";
+        // Caso 1: solo en caso de jugador
+        if ($min == 1 && $max == 1) {
+            echo "Para un jugador";
+        }
+        // para el mismo numero de jugadores minimo dos maximo dos o tres y tres etc.. 
+        elseif ($min == $max) {
+            echo "Para $min jugadores";
+        }
+        // Caso 3: hay un rango ejemplo de 2 a 4 jugadores
+        else {
+            echo "De $min a $max jugadores";
+        }
     }
-    // para el mismo numero de jugadores minimo dos maximo dos o tres y tres etc.. 
-    elseif ($min == $max) {
-        echo "Para $min jugadores";
-    }
-    // Caso 3: hay un rango ejemplo de 2 a 4 jugadores
-    else {
-        echo "De $min a $max jugadores";
-    }
-}
 
     // Sobrescribimos el metodo muestraResumen
     public function muestraResumen()
     {
-        echo "<br>Título: " . $this->getTitulo();
-        echo "<br>Número: " . $this->getNumero();
+        parent::muestraResumen();
         echo "<br>Consola: " . $this->consola;
         echo "<br>Jugadores: ";
         $this->muestraJugadoresPosibles();
-        echo "<br>Precio: " . $this->getPrecio() . " euros (IVA no incluido)";
         echo "<br>Precio con IVA: " . $this->getPrecioConIva() . " euros";
     }
 }
-?>

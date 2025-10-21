@@ -20,13 +20,11 @@ class CintaVideo extends Soporte
 
     public function muestraResumen()
     {
-        echo "<br>Título: " . $this->getTitulo();
-        echo "<br>Número: " . $this->getNumero();
+        parent::muestraResumen();
         echo "<br>Duración: " . $this->duracion . " minutos";
-        echo "<br>Precio: " . $this->getPrecio() . " euros (IVA no incluido)";
         echo "<br>Precio con IVA: " . $this->getPrecioConIva() . " euros";
     }
-}
+}    
 // ejercicio terminado sigue 324
 
 ?>

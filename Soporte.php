@@ -1,5 +1,10 @@
 <?php
-class Soporte
+
+//Hacemos la clase abstracta como dice en el ej 328, con esto conseguimos que no se pueda instanciar un objeto de la clase Soporte directamente, si no que lo debes hacer utilizando las subclases de esta.
+
+//Implementamos la interfaz como pide el ej 329, y comprobamos que no hace falta que la implementen tambien en su declaracion las clases hijas, ya lo hacen automaticamente al heredar de esta.
+
+abstract class Soporte implements Resumible
 {
     private $titulo;
     private $numero;
@@ -41,4 +46,3 @@ class Soporte
         echo "Precio: " . $this->precio . " (IVA no incluido)<br>";
     }
 }
-?>
