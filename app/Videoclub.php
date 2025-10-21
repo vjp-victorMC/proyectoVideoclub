@@ -2,6 +2,10 @@
 
 namespace Dwes\ProyectoVideoclub;
 
+use Dwes\ProyectoVideoclub\Util\SoporteYaAlquiladoException;
+use Dwes\ProyectoVideoclub\Util\CupoSuperadoException;
+use Dwes\ProyectoVideoclub\Util\SoporteNoEncontradoException;
+use Dwes\ProyectoVideoclub\Util\ClienteNoEncontradoException;
 
 class Videoclub
 {
@@ -10,10 +14,24 @@ class Videoclub
     private $numProductos = 0;
     private $socios = []; // array de Cliente
     private $numSocios = 0;
+    private $numProductosAlquilados;
+    private $numTotalAlquileres;
 
     public function __construct($nombre)
     {
         $this->nombre = $nombre;
+    }
+
+    //Getters
+
+    public function getNumProductosAlquilados()
+    {
+        return $this->numProductosAlquilados;
+    }
+
+    public function getNumTotalAlquileres()
+    {
+        return $this->numTotalAlquileres;
     }
 
     // Métodos públicos para crear soportes.
@@ -37,6 +55,60 @@ class Videoclub
         $numero = $this->numProductos + 1;
         $juego = new Juego($titulo, $numero, $precio, $consola, $minJ, $maxJ);
         $this->incluirProducto($juego);
+    }
+
+    //Metodo que alquila todos los productos que le pasemos en un array, si no existe alguno de ellos, no alquila ninguno
+    public function alquilarSocioProductos(int $numSocio, array $numerosProductos)
+    {
+        // Buscar el cliente
+        $cliente = null;
+        foreach ($this->socios as $s) {
+            if ($s->getNumero() == $numSocio) {
+                $cliente = $s;
+                break;
+            }
+        }
+        if ($cliente === null) {
+            echo "<br>No existe el socio con número $numSocio.";
+            return $this;
+        }
+
+        // Buscar los soportes y comprobar disponibilidad
+        $soportes = [];
+        foreach ($numerosProductos as $numSoporte) {
+            $soporte = null;
+            foreach ($this->productos as $p) {
+                if ($p->getNumero() == $numSoporte) {
+                    $soporte = $p;
+                    break;
+                }
+            }
+            if ($soporte === null) {
+                echo "<br>No existe el soporte con número $numSoporte.";
+                return $this;
+            }
+            if ($soporte->alquilado) {
+                echo "<br>El soporte con número $numSoporte ya está alquilado. No se realiza ningún alquiler.";
+                return $this;
+            }
+            $soportes[] = $soporte;
+        }
+
+        // Si todos están disponibles, alquilarlos
+        foreach ($soportes as $soporte) {
+            try {
+                $cliente->alquilar($soporte);
+                echo "<br>Has alquilado: " . $soporte->getTitulo();
+            } catch (CupoSuperadoException $e) {
+                echo "<br>Error: " . $e->getMessage();
+                break; // Si supera el cupo, no sigue alquilando
+            } catch (\Exception $e) {
+                echo "<br>Error inesperado: " . $e->getMessage();
+                break;
+            }
+        }
+
+        return $this;
     }
 
     // Añade el soporte al array
@@ -95,7 +167,7 @@ class Videoclub
         }
         if ($cliente === null) {
             echo "<br>No existe el socio con número $numeroCliente.";
-            return $this; // Cambiado para encadenamiento
+            return $this;
         }
 
         $soporte = null;
@@ -107,10 +179,115 @@ class Videoclub
         }
         if ($soporte === null) {
             echo "<br>No existe el soporte con número $numeroSoporte.";
-            return $this; // Cambiado para encadenamiento
+            return $this;
         }
 
-        $cliente->alquilar($soporte);
-        return $this; // Cambiado para encadenamiento
+        try {
+            $cliente->alquilar($soporte);
+            echo "<br>Has alquilado: " . $soporte->getTitulo();
+        } catch (SoporteYaAlquiladoException $e) {
+            echo "<br>Error: " . $e->getMessage();
+        } catch (CupoSuperadoException $e) {
+            echo "<br>Error: " . $e->getMessage();
+        } catch (SoporteNoEncontradoException $e) {
+            echo "<br>Error: " . $e->getMessage();
+        } catch (\Exception $e) {
+            // Captura cualquier otra excepción inesperada
+            echo "<br>Error inesperado: " . $e->getMessage();
+        }
+
+        return $this; // Encadenamiento
+    }
+
+    //Meotodo para devolver un producto
+
+    public function devolverSocioProducto(int $numSocio, int $numeroProducto)
+    {
+        $cliente = null;
+        foreach ($this->socios as $s) {
+            if ($s->getNumero() == $numSocio) {
+                $cliente = $s;
+                break;
+            }
+        }
+        if ($cliente === null) {
+            echo "<br>No existe el socio con número $numSocio.";
+            return $this;
+        }
+
+        $soporte = null;
+        foreach ($this->productos as $p) {
+            if ($p->getNumero() == $numeroProducto) {
+                $soporte = $p;
+                break;
+            }
+        }
+        if ($soporte === null) {
+            echo "<br>No existe el soporte con número $numeroProducto.";
+            return $this;
+        }
+
+        try {
+            $cliente->devolver($soporte->getNumero());
+            echo "<br>Has devuelto: " . $soporte->getTitulo();
+        } catch (SoporteNoEncontradoException $e) {
+            echo "<br>Error: " . $e->getMessage();
+        } catch (\Exception $e) {
+            // Captura cualquier otra excepción inesperada
+            echo "<br>Error inesperado: " . $e->getMessage();
+        }
+        return $this;
+    }
+
+    //Metodo para devolver varios productos
+
+    public function devolverSocioProductos(int $numSocio, array $numerosProductos)
+    {
+        // Buscar el cliente
+        $cliente = null;
+        foreach ($this->socios as $s) {
+            if ($s->getNumero() == $numSocio) {
+                $cliente = $s;
+                break;
+            }
+        }
+        if ($cliente === null) {
+            echo "<br>No existe el socio con número $numSocio.";
+            return $this;
+        }
+
+        // Buscar los soportes y comprobar disponibilidad
+        $soportes = [];
+        foreach ($numerosProductos as $numSoporte) {
+            $soporte = null;
+            foreach ($this->productos as $p) {
+                if ($p->getNumero() == $numSoporte) {
+                    $soporte = $p;
+                    break;
+                }
+            }
+            if ($soporte === null) {
+                echo "<br>No existe el soporte con número $numSoporte.";
+                return $this;
+            }
+            if (!$soporte->alquilado) {
+                echo "<br>El soporte con número $numSoporte ya está devuelto. No se realiza ninguna devolución.";
+                return $this;
+            }
+            $soportes[] = $soporte;
+        }
+
+        // Si todos están disponibles, devolverlos
+        foreach ($soportes as $soporte) {
+            try {
+                $cliente->devolver($soporte->getNumero());
+                echo "<br>Has devuelto: " . $soporte->getTitulo();
+            } catch (\Exception $e) {
+                echo "<br>Error inesperado: " . $e->getMessage();
+                break;
+            }
+        }
+
+        return $this;
     }
 }

@@ -73,7 +73,8 @@ class Cliente
 
         $this->soportesAlquilados[] = $s;
         $this->numSoportesAlquilados++;
-        // Puedes dejar el echo si quieres mensajes, pero no es obligatorio
+        $s->alquilado = true;
+
         return $this; // Encadenamiento
     }
 
@@ -82,11 +83,11 @@ class Cliente
     {
         foreach ($this->soportesAlquilados as $key => $soporte) {
             if ($soporte->getNumero() === $numSoporte) {
+                $soporte->alquilado = false; // Marcar como no alquilado
                 unset($this->soportesAlquilados[$key]);
                 $this->numSoportesAlquilados--;
-                // Reindexar el array si lo necesitas:
                 $this->soportesAlquilados = array_values($this->soportesAlquilados);
-                return $this; // Encadenamiento
+                return $this;
             }
         }
         throw new SoporteNoEncontradoException("No tienes alquilado el soporte número: $numSoporte");

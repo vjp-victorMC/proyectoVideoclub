@@ -31,5 +31,16 @@ $vc->alquilaSocioProducto(1, 2)
     ->alquilaSocioProducto(1, 3) // no 
     ->alquilaSocioProducto(1, 6); // no se puede porque el socio 1 tiene 2 alquileres como máximo
 
+
+
+echo "Mostrando Socios: <br>";
 //listo los socios 
+
 $vc->listarSocios();
+
+
+echo "Mostrando Socios después de devolver";
+
+$vc->devolverSocioProducto(1, 2);
+
+$vc->devolverSocioProductos(1, [2, 3]);
