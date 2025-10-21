@@ -4,6 +4,8 @@
 
 //Implementamos la interfaz como pide el ej 329, y comprobamos que no hace falta que la implementen tambien en su declaracion las clases hijas, ya lo hacen automaticamente al heredar de esta.
 
+include_once "Resumible.php";
+
 abstract class Soporte implements Resumible
 {
     private $titulo;
