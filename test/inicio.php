@@ -1,7 +1,10 @@
 <?php
-include "CintaVideo.php";
 
-include "Dvd.php";
+use Dwes\ProyectoVideoclub\CintaVideo;
+use Dwes\ProyectoVideoclub\DVD;
+use Dwes\ProyectoVideoclub\Juego;
+
+require_once __DIR__ . '/../autoload.php';
 
 $miCinta = new CintaVideo("Los cazafantasmas", 23, 3.5, 107);
 echo "<strong>" . $miCinta->getTitulo() . "</strong>";

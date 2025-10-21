@@ -1,5 +1,6 @@
 <?php
-include_once "Soporte.php";
+
+namespace Dwes\ProyectoVideoclub;
 // clase juego que extiende de soporte
 class Juego extends Soporte
 {

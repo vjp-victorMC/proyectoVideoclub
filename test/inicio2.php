@@ -1,8 +1,11 @@
 <?php
-include_once "CintaVideo.php";
-include_once "Dvd.php";
-include_once "Juego.php";
-include_once "Cliente.php";
+
+use Dwes\ProyectoVideoclub\CintaVideo;
+use Dwes\ProyectoVideoclub\DVD;
+use Dwes\ProyectoVideoclub\Juego;
+use Dwes\ProyectoVideoclub\Cliente;
+
+require_once __DIR__ . '/../autoload.php';
 
 $cliente1 = new Cliente("Bruce Wayne", 23);
 $cliente2 = new Cliente("Clark Kent", 33);

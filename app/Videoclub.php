@@ -1,9 +1,6 @@
 <?php
-include_once "Soporte.php";
-include_once "Cliente.php";
-include_once "Dvd.php";
-include_once "CintaVideo.php";
-include_once "Juego.php";
+
+namespace Dwes\ProyectoVideoclub;
 
 
 class Videoclub
@@ -98,7 +95,7 @@ class Videoclub
         }
         if ($cliente === null) {
             echo "<br>No existe el socio con número $numeroCliente.";
-            return false;
+            return $this; // Cambiado para encadenamiento
         }
 
         $soporte = null;
@@ -110,10 +107,10 @@ class Videoclub
         }
         if ($soporte === null) {
             echo "<br>No existe el soporte con número $numeroSoporte.";
-            return false;
+            return $this; // Cambiado para encadenamiento
         }
 
-        // Utilizamos el metodo alquilar de la clase cliente para hacer el alquiler pasandole el soporte recibido por parametros.
-        return $cliente->alquilar($soporte);
+        $cliente->alquilar($soporte);
+        return $this; // Cambiado para encadenamiento
     }
 }

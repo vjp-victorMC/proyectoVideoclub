@@ -1,5 +1,11 @@
 <?php
-include_once "Soporte.php";
+// v0.331
+
+namespace Dwes\ProyectoVideoclub;
+
+use Dwes\ProyectoVideoclub\Util\SoporteYaAlquiladoException;
+use Dwes\ProyectoVideoclub\Util\CupoSuperadoException;
+use Dwes\ProyectoVideoclub\Util\SoporteNoEncontradoException;
 
 class Cliente
 {
@@ -57,39 +63,33 @@ class Cliente
     // Alquilamos un soporte
     public function alquilar(Soporte $s) //creamos  un objeto soporte por parametro
     {
-        //  Si ya lo tiene alquilado
         if ($this->tieneAlquilado($s)) {
-            echo "<br>Ya tienes alquilado: " . $s->getTitulo();
-            return false;
+            throw new SoporteYaAlquiladoException("Ya tienes alquilado: " . $s->getTitulo());
         }
 
-        //  Si ya llego al maximo
         if (count($this->soportesAlquilados) >= $this->maxAlquilerConcurrente) {
-            echo "<br>No puedes alquilar más de " . $this->maxAlquilerConcurrente . " soportes.";
-            return false;
+            throw new CupoSuperadoException("No puedes alquilar más de " . $this->maxAlquilerConcurrente . " soportes.");
         }
 
-        // Alquilamos el soporte
         $this->soportesAlquilados[] = $s;
         $this->numSoportesAlquilados++;
-        echo "<br>Has alquilado: " . $s->getTitulo();
-        return true;
+        // Puedes dejar el echo si quieres mensajes, pero no es obligatorio
+        return $this; // Encadenamiento
     }
 
     // Devolvemos un soporte
     public function devolver(int $numSoporte)
     {
-        foreach ($this->soportesAlquilados as $i => $soporte) {
-            if ($soporte->getNumero() == $numSoporte) {
-                echo "<br>Has devuelto: " . $soporte->getTitulo();
-                unset($this->soportesAlquilados[$i]); // se quita del array
-                $this->soportesAlquilados = array_values($this->soportesAlquilados); // reordenamos el array
-                return true;
+        foreach ($this->soportesAlquilados as $key => $soporte) {
+            if ($soporte->getNumero() === $numSoporte) {
+                unset($this->soportesAlquilados[$key]);
+                $this->numSoportesAlquilados--;
+                // Reindexar el array si lo necesitas:
+                $this->soportesAlquilados = array_values($this->soportesAlquilados);
+                return $this; // Encadenamiento
             }
         }
-
-        echo "<br>No tienes alquilado el soporte con número $numSoporte.";
-        return false;
+        throw new SoporteNoEncontradoException("No tienes alquilado el soporte número: $numSoporte");
     }
 
     // Mostramos todos los soportes alquilados
