@@ -44,3 +44,5 @@ $vc->devolverSocioProductos(1, [2, 3]);
 echo "<br>Mostrando Socios después de devolver";
 
 $vc->listarSocios();
+
+// parte tres completamente funcional_comprovada
