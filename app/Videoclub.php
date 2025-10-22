@@ -57,7 +57,7 @@ class Videoclub
         $this->incluirProducto($juego);
     }
 
-    //Metodo que alquila todos los productos que le pasemos en un array, si no existe alguno de ellos, no alquila ninguno
+    //Metodo que alquila todos los productos que le pasemos en un array, si no existe alguno de ellos, no alquila ninguno.
     public function alquilarSocioProductos(int $numSocio, array $numerosProductos)
     {
         // Buscar el cliente
