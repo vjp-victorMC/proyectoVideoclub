@@ -9,12 +9,16 @@ if (isset($_POST['enviar'])) {
         $error = "Debes introducir un usuario y contraseña";
         include "index.php";
     } else {
-        if (($usuario === "admin" && $password === "admin") || ($usuario === "usuario" && $password === "usuario")) {
+        if ($usuario === "usuario" && $password === "usuario") {
             // almacenamos el usuario en la sesión
             session_start();
             $_SESSION['usuario'] = $usuario;
             // cargamos la página principal
             include "main.php";
+        } elseif ($usuario === "admin" && $password === "admin") {
+            session_start();
+            $_SESSION['usuario'] = $usuario;
+            include "mainAdmin.php";
         } else {
             // Si las credenciales no son válidas, se vuelven a pedir
             $error = "Usuario o contraseña no válidos!";
