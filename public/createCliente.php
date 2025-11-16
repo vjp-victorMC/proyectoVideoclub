@@ -21,7 +21,7 @@ if (isset($_SESSION['videoclub']['socios'][$user])) {
 }
 
 // Guardamos el cliente en la sesión en el array 'socios'
-//  Cambiado de $_SESSION['clientes'] a $_SESSION['videoclub']['socios']
+//  Cambio: antes era $_SESSION['clientes'], ahora unificado a $_SESSION['videoclub']['socios']
 $_SESSION['videoclub']['socios'][$user] = [
     "nombre" => $nombre,
     "usuario" => $user,
