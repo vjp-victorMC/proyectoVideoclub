@@ -1,38 +1,36 @@
 <?php
-session_start(); // Necesario para acceder a los datos del cliente
+session_start();
 
-// Comprobamos que nos envían el usuario correcto
-if (!isset($_GET['user']) || !isset($_SESSION['clientes'][$_GET['user']])) {
+// Verificamos que nos envían el usuario y que existe en la sesión
+//  Cambiado a $_SESSION['videoclub']['socios']
+if (!isset($_GET['user']) || !isset($_SESSION['videoclub']['socios'][$_GET['user']])) {
     echo "Cliente no encontrado";
     exit;
 }
 
-// Cargamos los datos del cliente seleccionado
-$cliente = $_SESSION['clientes'][$_GET['user']];
+// Obtenemos los datos del cliente a editar
+$cliente = $_SESSION['videoclub']['socios'][$_GET['user']];
 ?>
 
-<h2>Editar cliente: <?= $cliente['nombre'] ?></h2>
+<h2>Editar cliente: <?= htmlspecialchars($cliente['nombre']) ?></h2>
 
-<!-- Formulario de edición. Enviamos el usuario original en un campo oculto -->
 <form action="updateCliente.php" method="POST">
-
-    <!-- Usuario original (por si se cambia el login) -->
-    <input type="hidden" name="user_original" value="<?= $cliente['user'] ?>">
+    <!-- Guardamos el login original para poder cambiarlo si se edita -->
+    <input type="hidden" name="user_original" value="<?= htmlspecialchars($cliente['usuario']) ?>">
 
     <label>Nombre:</label><br>
-    <input type="text" name="nombre" value="<?= $cliente['nombre'] ?>"><br><br>
+    <input type="text" name="nombre" value="<?= htmlspecialchars($cliente['nombre']) ?>"><br><br>
 
     <label>Usuario (login):</label><br>
-    <input type="text" name="user" value="<?= $cliente['user'] ?>"><br><br>
+    <input type="text" name="user" value="<?= htmlspecialchars($cliente['usuario']) ?>"><br><br>
 
     <label>Password:</label><br>
-    <input type="password" name="password" value="<?= $cliente['password'] ?>"><br><br>
+    <input type="password" name="password" value="<?= htmlspecialchars($cliente['password']) ?>"><br><br>
 
     <label>Teléfono:</label><br>
-    <input type="text" name="telefono" value="<?= $cliente['telefono'] ?>"><br><br>
+    <input type="text" name="telefono" value="<?= htmlspecialchars($cliente['telefono']) ?>"><br><br>
 
     <input type="submit" value="Actualizar cliente">
 </form>
 
-<!-- Enlace para volver al panel del administrador -->
 <a href="mainAdmin.php">Volver</a>

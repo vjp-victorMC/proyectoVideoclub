@@ -1,7 +1,7 @@
 <?php
-session_start(); // Necesario para borrar del array de clientes
+session_start();
 
-// Comprobamos que nos envían un usuario válido
+// Verificamos que nos envían el usuario
 if (!isset($_GET['user'])) {
     echo "Cliente no especificado";
     exit;
@@ -9,11 +9,11 @@ if (!isset($_GET['user'])) {
 
 $user = $_GET['user'];
 
-// Si existe ese cliente, lo eliminamos
-if (isset($_SESSION['clientes'][$user])) {
-    unset($_SESSION['clientes'][$user]);
+// Eliminamos cliente si existe
+if (isset($_SESSION['videoclub']['socios'][$user])) {
+    unset($_SESSION['videoclub']['socios'][$user]);
 }
 
-// Volvemos al panel del administrador
+// Redirigimos al panel admin
 header("Location: mainAdmin.php");
 exit;

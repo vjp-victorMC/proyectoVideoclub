@@ -35,50 +35,44 @@ $vc = $_SESSION['videoclub'] ?? null;
             <!--      LISTADO DE CLIENTES   -->
             <!-- ========================== -->
             <section>
-                <h2>Listado de clientes</h2>
+    <h2>Listado de clientes</h2>
 
-                <!-- BOTÓN PARA CREAR CLIENTE -->
-                <!-- Este enlace lleva al formulario formCreateCliente.php -->
-                <p><a class="btn" href="formCreateCliente.php"> Crear nuevo cliente</a></p>
+    <p><a class="btn" href="formCreateCliente.php"> Crear nuevo cliente</a></p>
 
-                <?php if ($vc && !empty($vc['socios'])): ?>
-                <ul class="list clientes">
+    <?php if ($vc && !empty($vc['socios'])): ?>
+    <ul class="list clientes">
 
-                    <?php foreach ($vc['socios'] as $s): ?>
-                    <?php
-                        // Escapamos todos los datos del cliente para seguridad
-                        $num = htmlspecialchars($s['numero'] ?? '');
-                        $nombre = htmlspecialchars($s['nombre'] ?? '');
-                        $max = htmlspecialchars($s['maxAlquileres'] ?? '');
-                        $usuario = htmlspecialchars($s['usuario'] ?? '');
+        <?php foreach ($vc['socios'] as $key => $s): ?>
+        <?php
+            // Datos del cliente
+            $num = htmlspecialchars($s['numero'] ?? '');
+            $nombre = htmlspecialchars($s['nombre'] ?? '');
+            $max = htmlspecialchars($s['maxAlquileres'] ?? '');
+            $usuario = htmlspecialchars($s['usuario'] ?? '');
+        ?>
+        <li>
+            <?= "{$num} - {$nombre} (max {$max}) - usuario: {$usuario}" ?>
 
-                        // Para que funcione la edición y borrado, usamos el usuario como clave
-                    ?>
-                    <li>
-                        <?= "{$num} - {$nombre} (max {$max}) - usuario: {$usuario}" ?>
+            <!-- EDITAR CLIENTE -->
+            <a class="btn small" 
+               href="formUpdateCliente.php?user=<?= urlencode($key) ?>">
+               Editar
+            </a>
 
-                        <!-- ENLACE EDITAR CLIENTE -->
-                        <!-- Se le pasa ?user=X para cargarlo en formUpdateCliente.php -->
-                        <a class="btn small" 
-                           href="formUpdateCliente.php?user=<?= urlencode($usuario) ?>">
-                           Editar
-                        </a>
+            <!-- BORRAR CLIENTE -->
+            <a class="btn small danger"
+               href="removeCliente.php?user=<?= urlencode($key) ?>"
+               onclick="return confirm('¿Seguro que deseas borrar este cliente?')">
+               Borrar
+            </a>
+        </li>
+        <?php endforeach; ?>
 
-                        <!-- ENLACE BORRAR CLIENTE -->
-                        <!-- Confirmación con JS antes de proceder -->
-                        <a class="btn small danger"
-                           href="removeCliente.php?user=<?= urlencode($usuario) ?>"
-                           onclick="return confirm('¿Seguro que deseas borrar este cliente?')">
-                           Borrar
-                        </a>
-                    </li>
-                    <?php endforeach; ?>
-
-                </ul>
-                <?php else: ?>
-                <p class="muted">No hay socios cargados.</p>
-                <?php endif; ?>
-            </section>
+    </ul>
+    <?php else: ?>
+    <p class="muted">No hay socios cargados.</p>
+    <?php endif; ?>
+</section>
 
             <!-- ========================== -->
             <!--      LISTADO DE SOPORTES   -->

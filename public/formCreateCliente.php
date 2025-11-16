@@ -1,19 +1,18 @@
 <?php
-session_start(); // Iniciamos la sesión para poder acceder al array de clientes
+session_start(); // Iniciamos sesión para poder acceder a los clientes guardados
 ?>
 
 <h2>Crear nuevo cliente</h2>
 
 <?php
-// Si llega un mensaje de error desde createCliente.php lo mostramos
+// Mostramos mensaje de error si llega desde createCliente.php
 if (isset($_GET['error'])) {
     echo "<p style='color:red'>" . $_GET['error'] . "</p>";
 }
 ?>
 
-<!-- Formulario para crear un cliente. Se enviará a createCliente.php -->
+<!-- Formulario de creación de cliente -->
 <form action="createCliente.php" method="POST">
-
     <label>Nombre:</label><br>
     <input type="text" name="nombre"><br><br>
 
@@ -29,5 +28,5 @@ if (isset($_GET['error'])) {
     <input type="submit" value="Crear cliente">
 </form>
 
-<!-- Enlace para volver al panel del administrador -->
+<!-- Enlace de vuelta al panel admin -->
 <a href="mainAdmin.php">Volver</a>

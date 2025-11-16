@@ -1,39 +1,35 @@
 <?php
-session_start(); // Abrimos sesión para modificar la lista de clientes
+session_start(); // Necesario para guardar los clientes en sesión
 
-// Validamos los datos obligatorios
-if (
-    empty($_POST['nombre']) ||
-    empty($_POST['user']) ||
-    empty($_POST['password'])
-) {
-    // Si falta algún dato, volvemos al formulario con un mensaje de error
+// Validación de datos obligatorios
+if (empty($_POST['nombre']) || empty($_POST['user']) || empty($_POST['password'])) {
+    // Si falta algún dato, volvemos al formulario con mensaje de error
     header("Location: formCreateCliente.php?error=Faltan datos obligatorios");
     exit;
 }
 
-// Recogemos los datos del formulario
+// Recogemos los datos enviados
 $nombre = $_POST['nombre'];
 $user = $_POST['user'];
 $password = $_POST['password'];
 $telefono = $_POST['telefono'] ?? ""; // Puede venir vacío
 
-// Comprobamos si ya existe un cliente con ese usuario
-if (isset($_SESSION['clientes'][$user])) {
+// Verificamos si ya existe un cliente con ese login
+if (isset($_SESSION['videoclub']['socios'][$user])) {
     header("Location: formCreateCliente.php?error=El usuario ya existe");
     exit;
 }
 
-// Creamos el cliente y lo guardamos en la sesión
-// (Si estás usando clases, aquí iría new Cliente(...))
-$_SESSION['clientes'][$user] = [
+// Guardamos el cliente en la sesión en el array 'socios'
+//  Cambiado de $_SESSION['clientes'] a $_SESSION['videoclub']['socios']
+$_SESSION['videoclub']['socios'][$user] = [
     "nombre" => $nombre,
-    "user" => $user,
+    "usuario" => $user,
     "password" => $password,
     "telefono" => $telefono,
-    "alquileres" => [] // Se crea vacío
+    "maxAlquileres" => 3, // valor por defecto
 ];
 
-// Volvemos al panel del administrador
+// Redirigimos al panel admin para ver el nuevo cliente
 header("Location: mainAdmin.php");
 exit;
