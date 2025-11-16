@@ -15,20 +15,31 @@ class Cliente
     private $numSoportesAlquilados = 0;
     private $soportesAlquilados = []; //  soportes que se  alquila
 
-    // Constructor
-    public function __construct($nombre, $numero, $maxAlquilerConcurrente = 3)
+    // Nuevo: credenciales del cliente
+    private $usuario;
+    private $password;
+
+    // Constructor (usuario y password opcionales para compatibilidad)
+    public function __construct($nombre, $numero, $maxAlquilerConcurrente = 3, $usuario = null, $password = null)
     {
         $this->nombre = $nombre;
         $this->numero = $numero;
         $this->maxAlquilerConcurrente = $maxAlquilerConcurrente;
+        $this->usuario = $usuario;
+        $this->password = $password; // en producción deberías almacenar solo hash
     }
-
+    
     // geters y setters de numeros de clientes
     public function getNumero()
     {
         return $this->numero;
     }
 
+    // Nuevo: getter para el usuario
+    public function getUsuario()
+    {
+        return $this->usuario;
+    }
 
     public function setNumero($numero)
     {
@@ -105,5 +116,11 @@ class Cliente
                 echo "- " . $soporte->getTitulo() . " (Nº " . $soporte->getNumero() . ")<br>";
             }
         }
+    }
+
+    // devolver array de alquileres (objetos Soporte)
+    public function getAlquileres(): array
+    {
+        return $this->soportesAlquilados;
     }
 }

@@ -7,6 +7,7 @@
     <meta name="author" content="Victor Mariscal" />
     <meta name="description" content="Descripción de la página" />
     <title>Index</title>
+    <link rel="stylesheet" href="css/estilos.css">
 </head>
 
 <body>
@@ -30,4 +31,3 @@
 </form>
 
 </html>
-<?php
