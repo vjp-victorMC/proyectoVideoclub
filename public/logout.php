@@ -9,10 +9,6 @@ if (!isset($_SESSION)) {
 unset($_SESSION['usuario']);
 unset($_SESSION['cliente']);
 
-// Si quieres destruir también otros datos concretos, hazlo aquí:
-// unset($_SESSION['otra_clave']);
-
 // Redirigimos al formulario de login
 header("Location: index.php");
 exit;
-?>

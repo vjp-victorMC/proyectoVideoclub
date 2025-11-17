@@ -60,31 +60,34 @@ if (isset($_POST['enviar'])) {
     } elseif ($usuario === "admin" && $password === "admin") {
         $_SESSION['usuario'] = $usuario;
 
-        // Creamos aquí los arrays asociativos con los datos de ejemplo (ahora con usuario/password)
-        $productos = [
-            ['tipo' => 'Juego', 'titulo' => 'God of War', 'numero' => 1, 'precio' => 19.99, 'consola' => 'PS4', 'min' => 1, 'max' => 1],
-            ['tipo' => 'Juego', 'titulo' => 'The Last of Us Part II', 'numero' => 2, 'precio' => 49.99, 'consola' => 'PS4', 'min' => 1, 'max' => 1],
-            ['tipo' => 'Dvd', 'titulo' => 'Torrente', 'numero' => 3, 'precio' => 4.5, 'idiomas' => 'es', 'pantalla' => '16:9'],
-            ['tipo' => 'Dvd', 'titulo' => 'Origen', 'numero' => 4, 'precio' => 4.5, 'idiomas' => 'es,en,fr', 'pantalla' => '16:9'],
-            ['tipo' => 'Dvd', 'titulo' => 'El Imperio Contraataca', 'numero' => 5, 'precio' => 3.0, 'idiomas' => 'es,en', 'pantalla' => '16:9'],
-            ['tipo' => 'CintaVideo', 'titulo' => 'Los cazafantasmas', 'numero' => 6, 'precio' => 3.5, 'duracion' => 107],
-            ['tipo' => 'CintaVideo', 'titulo' => 'El nombre de la Rosa', 'numero' => 7, 'precio' => 1.5, 'duracion' => 140],
-        ];
+        // Si ya existe videoclub en sesión, no sobrescribimos los datos de productos/socios
+        if (!isset($_SESSION['videoclub'])) {
+            // Creamos aquí los arrays asociativos con los datos de ejemplo (ahora con usuario/password)
+            $productos = [
+                ['tipo' => 'Juego', 'titulo' => 'God of War', 'numero' => 1, 'precio' => 19.99, 'consola' => 'PS4', 'min' => 1, 'max' => 1],
+                ['tipo' => 'Juego', 'titulo' => 'The Last of Us Part II', 'numero' => 2, 'precio' => 49.99, 'consola' => 'PS4', 'min' => 1, 'max' => 1],
+                ['tipo' => 'Dvd', 'titulo' => 'Torrente', 'numero' => 3, 'precio' => 4.5, 'idiomas' => 'es', 'pantalla' => '16:9'],
+                ['tipo' => 'Dvd', 'titulo' => 'Origen', 'numero' => 4, 'precio' => 4.5, 'idiomas' => 'es,en,fr', 'pantalla' => '16:9'],
+                ['tipo' => 'Dvd', 'titulo' => 'El Imperio Contraataca', 'numero' => 5, 'precio' => 3.0, 'idiomas' => 'es,en', 'pantalla' => '16:9'],
+                ['tipo' => 'CintaVideo', 'titulo' => 'Los cazafantasmas', 'numero' => 6, 'precio' => 3.5, 'duracion' => 107],
+                ['tipo' => 'CintaVideo', 'titulo' => 'El nombre de la Rosa', 'numero' => 7, 'precio' => 1.5, 'duracion' => 140],
+            ];
 
-        // Añadimos ahora credenciales a los socios de ejemplo
-        $socios = [
-            ['nombre' => 'Amancio Ortega', 'numero' => 1, 'maxAlquileres' => 2, 'usuario' => 'amancio', 'password' => 'amancio123'],
-            ['nombre' => 'Pablo Picasso', 'numero' => 2, 'maxAlquileres' => 3, 'usuario' => 'pablo', 'password' => 'pablo123'],
-        ];
+            // Añadimos ahora credenciales a los socios de ejemplo
+            $socios = [
+                ['nombre' => 'Amancio Ortega', 'numero' => 1, 'maxAlquileres' => 2, 'usuario' => 'amancio', 'password' => 'amancio123'],
+                ['nombre' => 'Pablo Picasso', 'numero' => 2, 'maxAlquileres' => 3, 'usuario' => 'pablo', 'password' => 'pablo123'],
+            ];
 
-        // Guardamos en la sesión bajo una clave del videoclub 
-        $_SESSION['videoclub'] = [
-            'nombre' => 'Severo 8A',
-            'productos' => $productos,
-            'socios' => $socios,
-            'numProductos' => count($productos),
-            'numSocios' => count($socios)
-        ];
+            // Guardamos en la sesión bajo una clave del videoclub 
+            $_SESSION['videoclub'] = [
+                'nombre' => 'Severo 8A',
+                'productos' => $productos,
+                'socios' => $socios,
+                'numProductos' => count($productos),
+                'numSocios' => count($socios)
+            ];
+        }
 
         include "mainAdmin.php";
         exit;
