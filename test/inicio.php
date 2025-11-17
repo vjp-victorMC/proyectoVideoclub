@@ -16,7 +16,7 @@ $miCinta->muestraResumen();
 // Probando DVD
 
 
-$miDvd = new Dvd("Origen", 24, 15, "es,en,fr", "16:9");
+$miDvd = new Dvd("<br>Origen", 24, 15, "es,en,fr", "16:9");
 echo "<strong>" . $miDvd->getTitulo() . "</strong>";
 echo "<br>Precio: " . $miDvd->getPrecio() . " euros";
 echo "<br>Precio IVA incluido: " . $miDvd->getPrecioConIva() . " euros";
