@@ -100,64 +100,82 @@ class Videoclub
         $this->incluirProducto($juego);
     }
 
+    /**
+     * Busca un cliente por número.
+     * @param int $numeroCliente
+     * @return Cliente|null
+     */
+    private function buscarSocio(int $numeroCliente)
+    {
+        foreach ($this->socios as $s) {
+            if ($s->getNumero() == $numeroCliente) {
+                return $s;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Busca un producto por número.
+     * @param int $numeroProducto
+     * @return Soporte|null
+     */
+    private function buscarProducto(int $numeroProducto)
+    {
+        foreach ($this->productos as $p) {
+            if ($p->getNumero() == $numeroProducto) {
+                return $p;
+            }
+        }
+        return null;
+    }
+
     //Metodo que alquila todos los productos que le pasemos en un array, si no existe alguno de ellos, no alquila ninguno
     public function alquilarSocioProductos(int $numSocio, array $numerosProductos)
     {
-        // Buscar el cliente
-        $cliente = null;
-        foreach ($this->socios as $s) {
-            if ($s->getNumero() == $numSocio) {
-                $cliente = $s;
-                break;
-            }
-        }
+        $cliente = $this->buscarSocio($numSocio);
         if ($cliente === null) {
             echo "<br>No existe el socio con número $numSocio.";
             return $this;
         }
 
-        // Buscar los soportes y comprobar disponibilidad
-        $soportes = [];
+        // Validar soportes
+        $soportesParaAlquilar = [];
         foreach ($numerosProductos as $numSoporte) {
-            $soporte = null;
-            foreach ($this->productos as $p) {
-                if ($p->getNumero() == $numSoporte) {
-                    $soporte = $p;
-                    break;
-                }
-            }
+            $soporte = $this->buscarProducto($numSoporte);
+            
             if ($soporte === null) {
                 $this->logger->warning("No existe el soporte con número $numSoporte.", ['num_soporte' => $numSoporte]);
                 return $this;
             }
             if ($soporte->alquilado) {
                 $this->logger->warning("El soporte con número $numSoporte ya está alquilado. No se realiza ningún alquiler.", ['num_soporte' => $numSoporte]);
-                // return $this; // Corregido el original? El original hacia return $this. Mantenemos comportamiento.
                 return $this;
             }
-            $soportes[] = $soporte;
+            $soportesParaAlquilar[] = $soporte;
         }
 
-        // Si todos están disponibles, alquilarlos
-        foreach ($soportes as $soporte) {
-            try {
-                $cliente->alquilar($soporte);
-                // El log de 'Alquilado soporte' ya está en Cliente::alquilar. 
-                // Pero el enunciado dice "Siempre que se llame a un método del log, se le pasará como segundo parámetro la información que dispongamos."
-                // Y "Sustituir los echo que haya en el código, que ahora pasarán por el log..."
-                // Videoclub tenía: echo "<br>Has alquilado: " . $soporte->getTitulo();
-                // Lo reemplazamos aquí también para cumplir con "Videoclub" log.
-                $this->logger->info("Has alquilado: " . $soporte->getTitulo(), ['titulo' => $soporte->getTitulo(), 'cliente' => $cliente->getNumero()]);
-            } catch (CupoSuperadoException $e) {
-                $this->logger->warning("Error: " . $e->getMessage(), ['exception' => $e]);
-                break; // Si supera el cupo, no sigue alquilando
-            } catch (\Exception $e) {
-                $this->logger->warning("Error inesperado: " . $e->getMessage(), ['exception' => $e]);
-                break;
-            }
+        // Realizar alquileres
+        foreach ($soportesParaAlquilar as $soporte) {
+            $this->alquilarSoporteACliente($soporte, $cliente);
         }
 
         return $this;
+    }
+
+    /**
+     * Helper para alquilar un soporte individual a un cliente con manejo de log.
+     */
+    private function alquilarSoporteACliente(Soporte $soporte, Cliente $cliente)
+    {
+        try {
+            $cliente->alquilar($soporte);
+            $this->logger->info("Has alquilado: " . $soporte->getTitulo(), ['titulo' => $soporte->getTitulo(), 'cliente' => $cliente->getNumero()]);
+        } catch (CupoSuperadoException $e) {
+            $this->logger->warning("Error: " . $e->getMessage(), ['exception' => $e]);
+        } catch (\Exception $e) {
+            $this->logger->warning("Error inesperado: " . $e->getMessage(), ['exception' => $e]);
+        }
     }
 
     // Añade el soporte al array
@@ -218,25 +236,13 @@ class Videoclub
      */
     public function alquilaSocioProducto(int $numeroCliente, int $numeroSoporte)
     {
-        $cliente = null;
-        foreach ($this->socios as $s) {
-            if ($s->getNumero() == $numeroCliente) {
-                $cliente = $s;
-                break;
-            }
-        }
+        $cliente = $this->buscarSocio($numeroCliente);
         if ($cliente === null) {
             $this->logger->warning("No existe el socio con número $numeroCliente.", ['num_socio' => $numeroCliente]);
             return $this;
         }
 
-        $soporte = null;
-        foreach ($this->productos as $p) {
-            if ($p->getNumero() == $numeroSoporte) {
-                $soporte = $p;
-                break;
-            }
-        }
+        $soporte = $this->buscarProducto($numeroSoporte);
         if ($soporte === null) {
             $this->logger->warning("No existe el soporte con número $numeroSoporte.", ['num_soporte' => $numeroSoporte]);
             return $this;
@@ -263,69 +269,49 @@ class Videoclub
 
     public function devolverSocioProducto(int $numSocio, int $numeroProducto)
     {
-        $cliente = null;
-        foreach ($this->socios as $s) {
-            if ($s->getNumero() == $numSocio) {
-                $cliente = $s;
-                break;
-            }
-        }
+        $cliente = $this->buscarSocio($numSocio);
         if ($cliente === null) {
             $this->logger->warning("No existe el socio con número $numSocio.", ['num_socio' => $numSocio]);
             return $this;
         }
 
-        $soporte = null;
-        foreach ($this->productos as $p) {
-            if ($p->getNumero() == $numeroProducto) {
-                $soporte = $p;
-                break;
-            }
-        }
+        $soporte = $this->buscarProducto($numeroProducto);
         if ($soporte === null) {
             $this->logger->warning("No existe el soporte con número $numeroProducto.", ['num_soporte' => $numeroProducto]);
             return $this;
         }
 
+        $this->devolverSoporteDeCliente($soporte, $cliente);
+        return $this;
+    }
+
+    private function devolverSoporteDeCliente(Soporte $soporte, Cliente $cliente)
+    {
         try {
             $cliente->devolver($soporte->getNumero());
             $this->logger->info("Has devuelto: " . $soporte->getTitulo(), ['titulo' => $soporte->getTitulo(), 'cliente' => $cliente->getNumero()]);
         } catch (SoporteNoEncontradoException $e) {
             $this->logger->warning("Error: " . $e->getMessage(), ['exception' => $e]);
         } catch (\Exception $e) {
-            // Captura cualquier otra excepción inesperada
             $this->logger->warning("Error inesperado: " . $e->getMessage(), ['exception' => $e]);
         }
-        return $this;
     }
 
     //Metodo para devolver varios productos
 
     public function devolverSocioProductos(int $numSocio, array $numerosProductos)
     {
-        // Buscar el cliente
-        $cliente = null;
-        foreach ($this->socios as $s) {
-            if ($s->getNumero() == $numSocio) {
-                $cliente = $s;
-                break;
-            }
-        }
+        $cliente = $this->buscarSocio($numSocio);
         if ($cliente === null) {
             $this->logger->warning("No existe el socio con número $numSocio.", ['num_socio' => $numSocio]);
             return $this;
         }
 
-        // Buscar los soportes y comprobar disponibilidad
-        $soportes = [];
+        // Validar soportes
+        $soportesParaDevolver = [];
         foreach ($numerosProductos as $numSoporte) {
-            $soporte = null;
-            foreach ($this->productos as $p) {
-                if ($p->getNumero() == $numSoporte) {
-                    $soporte = $p;
-                    break;
-                }
-            }
+            $soporte = $this->buscarProducto($numSoporte);
+            
             if ($soporte === null) {
                 $this->logger->warning("No existe el soporte con número $numSoporte.", ['num_soporte' => $numSoporte]);
                 return $this;
@@ -334,20 +320,13 @@ class Videoclub
                 $this->logger->warning("El soporte con número $numSoporte ya está devuelto. No se realiza ninguna devolución.", ['num_soporte' => $numSoporte]);
                 return $this;
             }
-            $soportes[] = $soporte;
+            $soportesParaDevolver[] = $soporte;
         }
 
-        // Si todos están disponibles, devolverlos
-        foreach ($soportes as $soporte) {
-            try {
-                $cliente->devolver($soporte->getNumero());
-                $this->logger->info("Has devuelto: " . $soporte->getTitulo(), ['titulo' => $soporte->getTitulo(), 'cliente' => $cliente->getNumero()]);
-            } catch (\Exception $e) {
-                $this->logger->warning("Error inesperado: " . $e->getMessage(), ['exception' => $e]);
-                break;
-            }
+        // Realizar devoluciones
+        foreach ($soportesParaDevolver as $soporte) {
+            $this->devolverSoporteDeCliente($soporte, $cliente);
         }
 
-        return $this;
     }
 }
