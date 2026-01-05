@@ -2,63 +2,93 @@
 
 ## Descripción
 
-Este proyecto es una simulación de la gestión de un videoclub, desarrollado en PHP orientado a objetos. Permite administrar clientes, productos (soportes como DVDs, cintas de vídeo y juegos), alquileres y devoluciones, gestionando el estado de cada producto y el cupo de alquiler de los clientes. El sistema utiliza namespaces, autoloading y excepciones personalizadas para una arquitectura moderna y escalable.
+Este proyecto es una simulación de la gestión de un videoclub moderno, desarrollado en **PHP 8 + POO**. El sistema permite administrar integralmente productos (Cintas, DVDs, Juegos), socios y transacciones de alquiler/devolución.
 
-## Estructura de Carpetas
+El proyecto ha sido evolucionado para incluir estándares profesionales como **gestión de dependencias con Composer**, **Logging avanzado con Monolog**, **Web Scraping** y **Test Unitarios con PHPUnit**.
 
-- **app/**: Contiene todas las clases principales del proyecto (Cliente, Videoclub, Soporte, excepciones, etc.).
-- **test/**: Archivos de prueba y ejemplos de uso.
-- **vendor/**: Librerías externas (si se usa Composer).
-- **autoload.php**: Carga automática de clases mediante namespaces.
+## Características Principales
 
-## Funcionamiento
+### Gestión de Videoclub
+- **Catálogo Diverso**: Soporte para Cintas de Vídeo, DVDs y Videojuegos, cada uno con atributos específicos.
+- **Control de Stock y Alquileres**:
+    - Alquileres individuales o por lotes (arrays).
+    - Control de cupos máximos por cliente.
+    - Control de disponibilidad (evita doble alquiler).
+    - Historial de alquileres por cliente.
+- **Gestión de Socios**: Altas de socios con credenciales y límites personalizados.
 
-- Los clientes pueden alquilar y devolver productos.
-- El videoclub controla qué productos están alquilados y cuáles disponibles.
-- El sistema lanza excepciones específicas para gestionar errores de negocio (cupo superado, soporte ya alquilado, etc.).
-- El autoload permite cargar clases automáticamente sin necesidad de incluir archivos manualmente.
+### Funcionalidades Avanzadas
+- **Web Scraping Integrado**:
+    - Conexión automática con **Metacritic** para obtener puntuaciones reales de los productos.
+    - Implementado en la clase `Soporte`, capaz de analizar HTML y JSON-LD.
+- **Sistema de Logs (Monolog)**:
+    - Registro detallado de todas las operaciones (alquileres, devoluciones, errores, altas).
+    - Salidas configurables (consola, archivos rotativos) mediante `LogFactory`.
+- **Manejo de Errores Robusto**:
+    - Uso de excepciones personalizadas: `CupoSuperadoException`, `SoporteYaAlquiladoException`, `SoporteNoEncontradoException`.
 
-## Instrucciones de Ejecución
+### Calidad de Código
+- **Tests Unitarios**: Suite completa con **PHPUnit** cubriendo >95% de la funcionalidad.
+- **Refactorización**: Código optimizado para baja complejidad ciclomática (CRAP).
+- **Estándares**: PSR-4 Autoloading vía Composer.
 
-1. **Requisitos**:  
-   - PHP 7.4 o superior.
-   - Servidor local (XAMPP, WAMP, etc.) o CLI de PHP.
+## Requisitos e Instalación
 
-2. **Estructura**:  
-   - Coloca el contenido del proyecto en la carpeta raíz de tu servidor local.
-   - Asegúrate de que la estructura de carpetas sea la indicada arriba.
+### Requisitos
+- PHP 8.0 o superior.
+- Composer.
 
-3. **Ejecutar pruebas**:  
-   - Accede a la carpeta `test/`.
-   - Ejecuta el archivo de prueba principal, por ejemplo:
-     ```
-     php test/inicio3.php
-     ```
-   - O accede desde el navegador si usas un servidor local:
-     ```
-     http://localhost/ProyectoVideoclub/test/inicio3.php
-     ```
+### Instalación
+1. Clonar el repositorio.
+2. Instalar dependencias:
+   ```bash
+   composer install
+   ```
+3. Generar el autoloader (si es necesario):
+   ```bash
+   composer dump-autoload
+   ```
 
-4. **Autoload**:  
-   - El archivo `autoload.php` se encarga de cargar automáticamente las clases necesarias.  
-   - No es necesario modificar los includes en los archivos de prueba, solo asegúrate de requerir `autoload.php` al inicio.
+## Estructura del Proyecto
+
+- **`app/`**: Código fuente (Namespaces `Dwes\ProyectoVideoclub`).
+    - **`Util/`**: Factorías y Excepciones.
+- **`tests/`**: Pruebas unitarias (PHPUnit).
+- **`logs/`**: Archivos de log generados por Monolog.
+- **`vendor/`**: Librerías de terceros (Monolog, PHPUnit).
+- **`test/`**: Scripts de prueba manuales (`inicio3.php`).
+
+## Ejecución de Pruebas
+
+El proyecto incluye una batería de pruebas automatizadas.
+
+Para ejecutar todos los tests:
+```bash
+./vendor/bin/phpunit
+```
+
+Para ver la cobertura (requiere Xdebug/PCOV):
+```bash
+./vendor/bin/phpunit --coverage-text
+```
 
 ## Ejemplo de Uso
 
 ```php
-require_once __DIR__ . '/../autoload.php';
-
 use Dwes\ProyectoVideoclub\Videoclub;
 
-$vc = new Videoclub("Severo 8A");
-$vc->alquilaSocioProducto(1, 2)
-   ->alquilaSocioProducto(1, 3);
+// Instanciar Videoclub
+$vc = new Videoclub("Blockbuster Reloaded");
+
+// Incluir productos con URL de Metacritic
+$vc->incluirJuego("https://www.metacritic.com/game/god-of-war", "God of War", 19.99, "PS4", 1, 1);
+
+// Alquilar
+$vc->alquilaSocioProducto(1, 1); // Alquila God of War al Socio 1
 ```
 
 ## Autor
-
-Proyecto realizado para prácticas de DWES por Antonio Ángel Clemente Díaz y Víctor Mariscal Carril, alumnos de 2º de DAW.
+Proyecto realizado para prácticas de DWES por Antonio Ángel Clemente Díaz y Víctor Mariscal Carril. Evolucionado con técnicas de desarrollo ágil y testing.
 
 ## Licencia
-
 Uso educativo.
