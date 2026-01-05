@@ -5,10 +5,16 @@ namespace Dwes\ProyectoVideoclub;
 use Dwes\ProyectoVideoclub\Util\SoporteYaAlquiladoException;
 use Dwes\ProyectoVideoclub\Util\CupoSuperadoException;
 use Dwes\ProyectoVideoclub\Util\SoporteNoEncontradoException;
+use Dwes\ProyectoVideoclub\Util\LogFactory;
 use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
-use Monolog\Level;
 
+/**
+ * Class Cliente
+ * 
+ * Gestiona la información y los alquileres de un cliente del videoclub.
+ * 
+ * @package Dwes\ProyectoVideoclub
+ */
 class Cliente
 {
     // Atributos del cliente
@@ -23,7 +29,15 @@ class Cliente
     private $password;
     private $logger;
 
-    // Constructor (usuario y password opcionales para compatibilidad)
+    /**
+     * Constructor de Cliente.
+     * 
+     * @param string $nombre Nombre del cliente.
+     * @param int $numero Número identificativo del cliente.
+     * @param int $maxAlquilerConcurrente Máximo alquileres simultáneos (default 3).
+     * @param string|null $usuario Nombre de usuario (opcional).
+     * @param string|null $password Contraseña del usuario (opcional).
+     */
     public function __construct($nombre, $numero, $maxAlquilerConcurrente = 3, $usuario = null, $password = null)
     {
         $this->nombre = $nombre;
@@ -32,8 +46,7 @@ class Cliente
         $this->usuario = $usuario;
         $this->password = $password; // en producción deberías almacenar solo hash
         
-        $this->logger = new Logger('VideoclubLogger');
-        $this->logger->pushHandler(new StreamHandler(__DIR__ . '/../logs/videoclub.log', Level::Debug));
+        $this->logger = LogFactory::getLogger();
     }
     
     // geters y setters de numeros de clientes
@@ -59,14 +72,21 @@ class Cliente
         return $this->numSoportesAlquilados;
     }
 
-    //  resumen del cliente
+    /**
+     * Muestra el resumen del cliente y sus alquileres actuales.
+     */
     public function muestraResumen()
     {
         echo "<br>Nombre: " . $this->nombre;
         echo "<br>Soportes alquilados ahora: " . count($this->soportesAlquilados);
     }
 
-    // Comprobamos si un soporte ya esta alquilado por el cliente
+    /**
+     * Comprueba si el cliente tiene un soporte alquilado.
+     * 
+     * @param Soporte $s Soporte a comprobar.
+     * @return bool True si lo tiene alquilado, false en caso contrario.
+     */
     public function tieneAlquilado(Soporte $s): bool
     {
         foreach ($this->soportesAlquilados as $soporte) {
@@ -77,7 +97,14 @@ class Cliente
         return false;
     }
 
-    // Alquilamos un soporte
+    /**
+     * Alquila un soporte para el cliente.
+     * 
+     * @param Soporte $s Soporte a alquilar.
+     * @return Cliente Instancia actual para encadenamiento.
+     * @throws SoporteYaAlquiladoException Si el soporte ya lo tiene alquilado.
+     * @throws CupoSuperadoException Si ha alcanzado el límite de alquileres.
+     */
     public function alquilar(Soporte $s) //creamos  un objeto soporte por parametro
     {
         if ($this->tieneAlquilado($s)) {
@@ -98,7 +125,13 @@ class Cliente
         return $this; // Encadenamiento
     }
 
-    // Devolvemos un soporte
+    /**
+     * Devuelve un soporte alquilado.
+     * 
+     * @param int $numSoporte Número del soporte a devolver.
+     * @return Cliente Instancia actual.
+     * @throws SoporteNoEncontradoException Si el soporte no está en su lista de alquileres.
+     */
     public function devolver(int $numSoporte)
     {
         foreach ($this->soportesAlquilados as $key => $soporte) {
@@ -115,7 +148,9 @@ class Cliente
         throw new SoporteNoEncontradoException("No tienes alquilado el soporte número: $numSoporte");
     }
 
-    // Mostramos todos los soportes alquilados
+    /**
+     * Lista los alquileres actuales del cliente (log).
+     */
     public function listaAlquileres()
     {
         $cantidad = count($this->soportesAlquilados);

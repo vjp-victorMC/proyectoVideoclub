@@ -7,6 +7,14 @@
 namespace Dwes\ProyectoVideoclub;
 
 
+/**
+ * Class Soporte
+ * 
+ * Clase abstracta que define los soportes del videoclub.
+ * Implementa la interfaz Resumible.
+ * 
+ * @package Dwes\ProyectoVideoclub
+ */
 abstract class Soporte implements Resumible
 {
     private $titulo;
@@ -16,6 +24,13 @@ abstract class Soporte implements Resumible
 
     const IVA = 21;
 
+    /**
+     * Constructor de la clase Soporte.
+     * 
+     * @param string $titulo Título del soporte.
+     * @param int $numero Número identificativo del soporte.
+     * @param float $precio Precio de alquiler del soporte.
+     */
     public function __construct($titulo, $numero, $precio)
     {
         $this->titulo = $titulo;
@@ -23,26 +38,49 @@ abstract class Soporte implements Resumible
         $this->precio = $precio;
     }
 
+    /**
+     * Obtiene el título del soporte.
+     * 
+     * @return string Título del soporte.
+     */
     public function getTitulo()
     {
         return $this->titulo;
     }
 
+    /**
+     * Obtiene el número identificativo.
+     * 
+     * @return int Número del soporte.
+     */
     public function getNumero()
     {
         return $this->numero;
     }
 
+    /**
+     * Obtiene el precio sin IVA.
+     * 
+     * @return float Precio.
+     */
     public function getPrecio()
     {
         return $this->precio;
     }
 
+    /**
+     * Calcula y devuelve el precio con IVA incluido.
+     * 
+     * @return float Precio con IVA.
+     */
     public function getPrecioConIva()
     {
         return $this->precio * (1 + self::IVA / 100);
     }
 
+    /**
+     * Muestra un resumen de los datos del soporte (HTML).
+     */
     public function muestraResumen()
     {
         echo "<br>Título: " . $this->titulo . "<br>";

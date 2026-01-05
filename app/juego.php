@@ -2,6 +2,13 @@
 
 namespace Dwes\ProyectoVideoclub;
 // clase juego que extiende de soporte
+/**
+ * Class Juego
+ * 
+ * Representa un videojuego para consola.
+ * 
+ * @package Dwes\ProyectoVideoclub
+ */
 class Juego extends Soporte
 {
     private $consola;
@@ -9,6 +16,16 @@ class Juego extends Soporte
     private $maxNumJugadores;
 
     // sobrescrivimos el constructor
+    /**
+     * Constructor de Juego.
+     * 
+     * @param string $titulo Título.
+     * @param int $numero Número.
+     * @param float $precio Precio.
+     * @param string $consola Consola (ej: PS4).
+     * @param int $minNumJugadores Mínimo de jugadores.
+     * @param int $maxNumJugadores Máximo de jugadores.
+     */
     public function __construct($titulo, $numero, $precio, $consola, $minNumJugadores, $maxNumJugadores)
     {
         parent::__construct($titulo, $numero, $precio);
@@ -17,6 +34,9 @@ class Juego extends Soporte
         $this->maxNumJugadores = $maxNumJugadores;
     }
 
+    /**
+     * Muestra la cantidad de jugadores posibles.
+     */
     public function muestraJugadoresPosibles()
     {
         $min = $this->minNumJugadores;
@@ -37,6 +57,9 @@ class Juego extends Soporte
     }
 
     // Sobrescribimos el metodo muestraResumen
+    /**
+     * Muestra el resumen del juego.
+     */
     public function muestraResumen()
     {
         parent::muestraResumen();

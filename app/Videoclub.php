@@ -6,10 +6,16 @@ use Dwes\ProyectoVideoclub\Util\SoporteYaAlquiladoException;
 use Dwes\ProyectoVideoclub\Util\CupoSuperadoException;
 use Dwes\ProyectoVideoclub\Util\SoporteNoEncontradoException;
 use Dwes\ProyectoVideoclub\Util\ClienteNoEncontradoException;
+use Dwes\ProyectoVideoclub\Util\LogFactory;
 use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
-use Monolog\Level;
 
+/**
+ * Class Videoclub
+ * 
+ * Gestiona productos (soportes) y socios.
+ * 
+ * @package Dwes\ProyectoVideoclub
+ */
 class Videoclub
 {
     private $nombre;
@@ -21,11 +27,15 @@ class Videoclub
     private $numTotalAlquileres;
     private $logger;
 
+    /**
+     * Constructor de Videoclub.
+     * 
+     * @param string $nombre Nombre del videoclub.
+     */
     public function __construct($nombre)
     {
         $this->nombre = $nombre;
-        $this->logger = new Logger('VideoclubLogger');
-        $this->logger->pushHandler(new StreamHandler(__DIR__ . '/../logs/videoclub.log', Level::Debug));
+        $this->logger = LogFactory::getLogger();
     }
 
     //Getters
@@ -42,6 +52,13 @@ class Videoclub
 
     // Métodos públicos para crear soportes.
 
+    /**
+     * Incluye una nueva Cinta de Video en el catálogo.
+     * 
+     * @param string $titulo Título.
+     * @param float $precio Precio.
+     * @param int $duracion Duración.
+     */
     public function incluirCintaVideo($titulo, $precio, $duracion)
     {
         $numero = $this->numProductos + 1;
@@ -49,6 +66,14 @@ class Videoclub
         $this->incluirProducto($cintaVideo);
     }
 
+    /**
+     * Incluye un nuevo DVD en el catálogo.
+     * 
+     * @param string $titulo Título.
+     * @param float $precio Precio.
+     * @param string $idiomas Idiomas.
+     * @param string $pantalla Formato de pantalla.
+     */
     public function incluirDvd($titulo, $precio, $idiomas, $pantalla)
     {
         $numero = $this->numProductos + 1;
@@ -56,6 +81,15 @@ class Videoclub
         $this->incluirProducto($dvd);
     }
 
+    /**
+     * Incluye un nuevo Juego en el catálogo.
+     * 
+     * @param string $titulo Título.
+     * @param float $precio Precio.
+     * @param string $consola Consola.
+     * @param int $minJ Mínimo de jugadores.
+     * @param int $maxJ Máximo de jugadores.
+     */
     public function incluirJuego($titulo, $precio, $consola, $minJ, $maxJ)
     {
         $numero = $this->numProductos + 1;
@@ -131,7 +165,12 @@ class Videoclub
         $this->logger->info("Producto incluido: " . $producto->getTitulo() . " (Nº " . $producto->getNumero() . ")", ['titulo' => $producto->getTitulo(), 'numero' => $producto->getNumero()]);
     }
 
-    // Socios
+    /**
+     * Registra un nuevo socio.
+     * 
+     * @param string $nombre Nombre del socio.
+     * @param int $maxAlquileresConcurrentes Máximo de alquileres a la vez.
+     */
     public function incluirSocio($nombre, $maxAlquileresConcurrentes = 3)
     {
         $numero = $this->numSocios + 1;
@@ -167,7 +206,13 @@ class Videoclub
         }
     }
 
-    // Alquilar: busca cliente y soporte por número y delega en Cliente->alquilar()
+    /**
+     * Realiza el alquiler de un producto para un socio.
+     * 
+     * @param int $numeroCliente Número del cliente.
+     * @param int $numeroSoporte Número del soporte.
+     * @return Videoclub Instancia actual.
+     */
     public function alquilaSocioProducto(int $numeroCliente, int $numeroSoporte)
     {
         $cliente = null;
