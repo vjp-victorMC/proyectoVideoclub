@@ -45,15 +45,15 @@ class Juego extends Soporte
 
         // Caso 1: solo en caso de jugador
         if ($min == 1 && $max == 1) {
-            echo "Para un jugador";
+            return "Para un jugador";
         }
         // para el mismo numero de jugadores minimo dos maximo dos o tres y tres etc.. 
         elseif ($min == $max) {
-            echo "Para $min jugadores";
+            return "Para $min jugadores";
         }
         // Caso 3: hay un rango ejemplo de 2 a 4 jugadores
         else {
-            echo "De $min a $max jugadores";
+            return "De $min a $max jugadores";
         }
     }
 
@@ -63,11 +63,13 @@ class Juego extends Soporte
      */
     public function muestraResumen()
     {
-        parent::muestraResumen();
-        echo "<br>Consola: " . $this->consola;
-        echo "<br>Jugadores: ";
-        $this->muestraJugadoresPosibles();
-        echo "<br>Metacritic: <a href='" . $this->metacritic . "'>" . $this->metacritic . "</a>";
-        echo "<br>Precio con IVA: " . $this->getPrecioConIva() . " euros";
+        $resumen = parent::muestraResumen();
+        $extra = "<br>Consola: " . $this->consola;
+        $extra .= "<br>Jugadores: " . $this->muestraJugadoresPosibles(); 
+        $extra .= "<br>Metacritic: <a href='" . $this->metacritic . "'>" . $this->metacritic . "</a>";
+        $extra .= "<br>Precio con IVA: " . $this->getPrecioConIva() . " euros";
+        
+        echo $extra;
+        return $resumen . $extra;
     }
 }

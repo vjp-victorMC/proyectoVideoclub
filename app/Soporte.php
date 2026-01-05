@@ -83,12 +83,17 @@ abstract class Soporte implements Resumible
 
     /**
      * Muestra un resumen de los datos del soporte (HTML).
+     * 
+     * @return string Resumen en HTML.
      */
     public function muestraResumen()
     {
-        echo "<br>Título: " . $this->titulo . "<br>";
-        echo "Número: " . $this->numero . "<br>";
-        echo "Precio: " . $this->precio . " (IVA no incluido)<br>";
+        $resumen = "<br>Título: " . $this->titulo . "<br>";
+        $resumen .= "Número: " . $this->numero . "<br>";
+        $resumen .= "Precio: " . $this->precio . " (IVA no incluido)<br>";
+        
+        echo $resumen;
+        return $resumen;
     }
 
     /**

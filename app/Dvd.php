@@ -35,12 +35,13 @@ class Dvd extends Soporte {
      * Muestra el resumen del DVD.
      */
     public function muestraResumen() {
-        $msg = parent::muestraResumen(); // Asumiendo que Soporte ya devuelve algo
-        $msg .= "<br>Idiomas: " . $this->idiomas;
-        $msg .= "<br>Pantalla: " . $this->formatPantalla;
-        $msg .= "<br>Duración: " . $this->duracion . " min";
-        $msg .= "<br>Metacritic: <a href='" . $this->metacritic . "'>" . $this->metacritic . "</a>";
-        echo $msg;
-        return $msg; // Ejercicio 551
+        $msg = parent::muestraResumen();
+        $extra = "<br>Idiomas: " . $this->idiomas;
+        $extra .= "<br>Pantalla: " . $this->formatPantalla;
+        $extra .= "<br>Duración: " . $this->duracion . " min";
+        $extra .= "<br>Metacritic: <a href='" . $this->metacritic . "'>" . $this->metacritic . "</a>";
+        
+        echo $extra;
+        return $msg . $extra;
     }
 }
