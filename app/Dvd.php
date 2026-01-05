@@ -16,6 +16,7 @@ class Dvd extends Soporte {
     /**
      * Constructor de Dvd.
      * 
+     * @param string $metacritic URL de Metacritic.
      * @param string $titulo Título.
      * @param int $numero Número.
      * @param float $precio Precio.
@@ -23,8 +24,8 @@ class Dvd extends Soporte {
      * @param string $pantalla Formato de pantalla.
      * @param int $duracion Duración en minutos.
      */
-    public function __construct($titulo, $numero, $precio, $idiomas, $pantalla, $duracion) {
-        parent::__construct($titulo, $numero, $precio);
+    public function __construct($metacritic, $titulo, $numero, $precio, $idiomas, $pantalla, $duracion) {
+        parent::__construct($metacritic, $titulo, $numero, $precio);
         $this->idiomas = $idiomas;
         $this->formatPantalla = $pantalla;
         $this->duracion = $duracion;
@@ -38,6 +39,7 @@ class Dvd extends Soporte {
         $msg .= "<br>Idiomas: " . $this->idiomas;
         $msg .= "<br>Pantalla: " . $this->formatPantalla;
         $msg .= "<br>Duración: " . $this->duracion . " min";
+        $msg .= "<br>Metacritic: <a href='" . $this->metacritic . "'>" . $this->metacritic . "</a>";
         echo $msg;
         return $msg; // Ejercicio 551
     }

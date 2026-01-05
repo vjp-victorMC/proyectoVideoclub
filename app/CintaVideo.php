@@ -16,14 +16,15 @@ class CintaVideo extends Soporte
     /**
      * Constructor de CintaVideo.
      * 
+     * @param string $metacritic URL de Metacritic.
      * @param string $titulo Título de la cinta.
      * @param int $numero Número de soporte.
      * @param float $precio Precio de alquiler.
      * @param int $duracion Duración en minutos.
      */
-    public function __construct($titulo, $numero, $precio, $duracion)
+    public function __construct($metacritic, $titulo, $numero, $precio, $duracion)
     {
-        parent::__construct($titulo, $numero, $precio);
+        parent::__construct($metacritic, $titulo, $numero, $precio);
         $this->duracion = $duracion;
     }
 
@@ -40,6 +41,7 @@ class CintaVideo extends Soporte
     {
         parent::muestraResumen();
         echo "<br>Duración: " . $this->duracion . " minutos";
+        echo "<br>Metacritic: <a href='" . $this->metacritic . "'>" . $this->metacritic . "</a>";
         echo "<br>Precio con IVA: " . $this->getPrecioConIva() . " euros";
     }
 }

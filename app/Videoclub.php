@@ -55,45 +55,48 @@ class Videoclub
     /**
      * Incluye una nueva Cinta de Video en el catálogo.
      * 
+     * @param string $metacritic URL de Metacritic.
      * @param string $titulo Título.
      * @param float $precio Precio.
      * @param int $duracion Duración.
      */
-    public function incluirCintaVideo($titulo, $precio, $duracion)
+    public function incluirCintaVideo($metacritic, $titulo, $precio, $duracion)
     {
         $numero = $this->numProductos + 1;
-        $cintaVideo = new CintaVideo($titulo, $numero, $precio, $duracion);
+        $cintaVideo = new CintaVideo($metacritic, $titulo, $numero, $precio, $duracion);
         $this->incluirProducto($cintaVideo);
     }
 
     /**
      * Incluye un nuevo DVD en el catálogo.
      * 
+     * @param string $metacritic URL de Metacritic.
      * @param string $titulo Título.
      * @param float $precio Precio.
      * @param string $idiomas Idiomas.
      * @param string $pantalla Formato de pantalla.
      */
-    public function incluirDvd($titulo, $precio, $idiomas, $pantalla)
+    public function incluirDvd($metacritic, $titulo, $precio, $idiomas, $pantalla)
     {
         $numero = $this->numProductos + 1;
-        $dvd = new Dvd($titulo, $numero, $precio, $idiomas, $pantalla);
+        $dvd = new Dvd($metacritic, $titulo, $numero, $precio, $idiomas, $pantalla, 120); // Valor por defecto para duracion que faltaba en constructor original pero DVd requiere
         $this->incluirProducto($dvd);
     }
 
     /**
      * Incluye un nuevo Juego en el catálogo.
      * 
+     * @param string $metacritic URL de Metacritic.
      * @param string $titulo Título.
      * @param float $precio Precio.
      * @param string $consola Consola.
      * @param int $minJ Mínimo de jugadores.
      * @param int $maxJ Máximo de jugadores.
      */
-    public function incluirJuego($titulo, $precio, $consola, $minJ, $maxJ)
+    public function incluirJuego($metacritic, $titulo, $precio, $consola, $minJ, $maxJ)
     {
         $numero = $this->numProductos + 1;
-        $juego = new Juego($titulo, $numero, $precio, $consola, $minJ, $maxJ);
+        $juego = new Juego($metacritic, $titulo, $numero, $precio, $consola, $minJ, $maxJ);
         $this->incluirProducto($juego);
     }
 

@@ -19,6 +19,7 @@ class Juego extends Soporte
     /**
      * Constructor de Juego.
      * 
+     * @param string $metacritic URL de Metacritic.
      * @param string $titulo Título.
      * @param int $numero Número.
      * @param float $precio Precio.
@@ -26,9 +27,9 @@ class Juego extends Soporte
      * @param int $minNumJugadores Mínimo de jugadores.
      * @param int $maxNumJugadores Máximo de jugadores.
      */
-    public function __construct($titulo, $numero, $precio, $consola, $minNumJugadores, $maxNumJugadores)
+    public function __construct($metacritic, $titulo, $numero, $precio, $consola, $minNumJugadores, $maxNumJugadores)
     {
-        parent::__construct($titulo, $numero, $precio);
+        parent::__construct($metacritic, $titulo, $numero, $precio);
         $this->consola = $consola;
         $this->minNumJugadores = $minNumJugadores;
         $this->maxNumJugadores = $maxNumJugadores;
@@ -66,6 +67,7 @@ class Juego extends Soporte
         echo "<br>Consola: " . $this->consola;
         echo "<br>Jugadores: ";
         $this->muestraJugadoresPosibles();
+        echo "<br>Metacritic: <a href='" . $this->metacritic . "'>" . $this->metacritic . "</a>";
         echo "<br>Precio con IVA: " . $this->getPrecioConIva() . " euros";
     }
 }

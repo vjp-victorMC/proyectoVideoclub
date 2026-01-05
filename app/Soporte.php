@@ -21,18 +21,21 @@ abstract class Soporte implements Resumible
     private $numero;
     private $precio;
     public $alquilado = false;
+    public $metacritic;
 
     const IVA = 21;
 
     /**
      * Constructor de la clase Soporte.
      * 
+     * @param string $metacritic URL de Metacritic.
      * @param string $titulo Título del soporte.
      * @param int $numero Número identificativo del soporte.
      * @param float $precio Precio de alquiler del soporte.
      */
-    public function __construct($titulo, $numero, $precio)
+    public function __construct($metacritic, $titulo, $numero, $precio)
     {
+        $this->metacritic = $metacritic;
         $this->titulo = $titulo;
         $this->numero = $numero;
         $this->precio = $precio;
@@ -86,5 +89,68 @@ abstract class Soporte implements Resumible
         echo "<br>Título: " . $this->titulo . "<br>";
         echo "Número: " . $this->numero . "<br>";
         echo "Precio: " . $this->precio . " (IVA no incluido)<br>";
+    }
+
+    /**
+     * Obtiene la puntuación de Metacritic mediante scraping.
+     * 
+     * @return string Puntuación o mensaje de error.
+     */
+    public function getPuntuacion()
+    {
+        if (empty($this->metacritic)) {
+            return "Sin URL";
+        }
+
+        try {
+            // Contexto para simular un navegador y evitar errores SSL
+            $context = stream_context_create([
+                'http' => [
+                    'method' => 'GET',
+                    'header' => "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36\r\n" .
+                                "Accept-Language: en-US,en;q=0.9\r\n",
+                    'ignore_errors' => true
+                ],
+                "ssl" => [
+                    "verify_peer" => false,
+                    "verify_peer_name" => false,
+                ],
+            ]);
+
+            // Obtenemos el HTML
+            $html = @file_get_contents($this->metacritic, false, $context);
+
+            if ($html === false) {
+                return "Error conexión";
+            }
+
+            // Buscamos la puntuación con Regex (intentamos varios patrones comunes de Metacritic)
+            // Patrón nuevo: <div  title="Metascore 94 out of 100" ...
+            // Patrón para el numero en el circulo: class="c-productScoreInfo_scoreNumber ... "><span>94</span>
+            
+            $score = "Desconocida";
+
+            // Intento 1: Patrón de clases modernas
+            if (preg_match('/c-productScoreInfo_scoreNumber[^>]*>.*?<span>(\d+)<\/span>/s', $html, $matches)) {
+                $score = $matches[1];
+            }
+            // Intento 2: Buscar en JSON-LD (ratingValue) - Más robusto. Permisivo con caracteres intermedios (comillas, dos puntos, espacios).
+            elseif (preg_match('/ratingValue.*?(\d{2})/', $html, $matches)) {
+                $score = $matches[1];
+            }
+            // Intento 3: Buscar por title="Metascore XX out of 100"
+            elseif (preg_match('/title="Metascore (\d+) out of 100"/', $html, $matches)) {
+                $score = $matches[1];
+            }
+            // Intento 3: Legacy metascore_w
+            elseif (preg_match('/metascore_w[^>]*>(\d+)<\/span>/', $html, $matches)) {
+                $score = $matches[1];
+            }
+
+            return $score;
+
+        } catch (\Exception $e) {
+            return "Error: " . $e->getMessage();
+        }
     }
 }
