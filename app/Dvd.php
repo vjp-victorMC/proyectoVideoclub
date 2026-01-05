@@ -6,12 +6,14 @@ class Dvd extends Soporte
 {
     private $idiomas;
     private $formatPantalla;
+    private $duracion; // Ejercicio 562: Nueva propiedad
 
-    public function __construct($titulo, $numero, $precio, $idiomas, $pantalla)
+    public function __construct($titulo, $numero, $precio, $idiomas, $pantalla, $duracion)
     {
         parent::__construct($titulo, $numero, $precio);
         $this->idiomas = $idiomas;
         $this->formatPantalla = $pantalla;
+        $this->duracion = $duracion; // Ejercicio 562
     }
 
     public function getPrecioConIva()
@@ -21,9 +23,14 @@ class Dvd extends Soporte
 
     public function muestraResumen()
     {
-        parent::muestraResumen();
-        echo "<br>Idiomas: " . $this->idiomas;
-        echo "<br>Pantalla: " . $this->formatPantalla;
-        echo "<br>Precio con IVA: " . $this->getPrecioConIva() . " euros";
+        // Guardamos el mensaje en una variable para hacer echo y return
+        $msg = "Película en DVD: " . $this->titulo . "<br>";
+        $msg .= "Idiomas: " . $this->idiomas;
+        $msg .= "<br>Pantalla: " . $this->formatPantalla;
+        $msg .= "<br>Duración: " . $this->duracion . " min"; // Ejercicio 562
+        $msg .= "<br>Precio con IVA: " . $this->getPrecioConIva() . " euros";
+        
+        echo $msg;
+        return $msg; // Ejercicio 551: Ahora devuelve la cadena
     }
 }
