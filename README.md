@@ -2,9 +2,7 @@
 
 ## Descripción
 
-Este proyecto es una simulación de la gestión de un videoclub moderno, desarrollado en **PHP 8 + POO**. El sistema permite administrar integralmente productos (Cintas, DVDs, Juegos), socios y transacciones de alquiler/devolución.
-
-El proyecto ha sido evolucionado para incluir estándares profesionales como **gestión de dependencias con Composer**, **Logging avanzado con Monolog**, **Web Scraping** y **Test Unitarios con PHPUnit**.
+Este proyecto es una simulación de la gestión de un videoclub moderno, desarrollado en PHP 8. El sistema permite administrar integralmente productos (Cintas, DVDs, Juegos), socios y transacciones de alquiler/devolución.
 
 ## Características Principales
 
@@ -88,7 +86,7 @@ $vc->alquilaSocioProducto(1, 1); // Alquila God of War al Socio 1
 ```
 
 ## Autor
-Proyecto realizado para prácticas de DWES por Antonio Ángel Clemente Díaz y Víctor Mariscal Carril. Evolucionado con técnicas de desarrollo ágil y testing.
+Proyecto realizado para prácticas de DWES por Antonio Ángel Clemente Díaz y Víctor Mariscal Carril.
 
 ## Licencia
 Uso educativo.
