@@ -71,3 +71,5 @@ try {
 } catch (CupoSuperadoException $e) {
     echo "<br>Error: " . $e->getMessage();
 }
+
+// parte dos totalmente funcional comprovada

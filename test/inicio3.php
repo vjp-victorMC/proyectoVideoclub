@@ -46,22 +46,9 @@ echo "<br>Mostrando Socios después de devolver";
 
 $vc->listarSocios();
 
+// parte tres completamente funcional_comprovada
+
 echo "<br><br>--- Puntuaciones de alquileres del Socio 1 ---<br>";
-// Obtener alquileres del socio 1 (vamos a usar un hack para obtener el objeto socio desde el videoclub o simulamos que lo tenemos)
-// Como Videoclub no tiene metodo 'getSocio', vamos a iterar los alquileres devolviendo los productos
-// Pero el enunciado dice "obtener todos los alquileres de un cliente mediante getAlquileres()".
-// Primero necesitamos el objeto Cliente. En este script no tenemos la instancia del cliente suelta, estan dentro del videoclub.
-// Vamos a recuperar el socio 1 accediendo a la propiedad privada 'socios' mediante reflexion o simplemente modificando Videoclub para exponerlos?
-// No, el enunciado dice "Trae el cliente, llamale getAlquileres". 
-// Vamos a crear un metodo auxiliar en inicio3 para "sacar" el socio o simplemente asumimos que podemos iterarlo.
-// O mas facil: $vc->alquilaSocioProducto(...) devuelve $vc.
-// Pero los clientes están encapsulados.
-// Modificamos Videoclub para devolver un socio? No se pidió.
-// Pero en la línea 26 hemos alquilado cosas al socio 1.
-// Vamos a usar REFLACCIÓN para obtener el socio 1 de $vc para la prueba, o instanciamos un cliente fuera y lo metemos.
-// Mejor: Instanciar un cliente, meterlo en el videoclub, alquilar y probar.
-// Pero ya tenemos código que usa IDs internos.
-// Vamos a usar Reflection para sacar el socio del array privado, solo para este test.
 $reflection = new ReflectionClass($vc);
 $propiedadSocios = $reflection->getProperty('socios');
 $propiedadSocios->setAccessible(true);

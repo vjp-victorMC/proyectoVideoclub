@@ -30,3 +30,5 @@ echo "<strong>" . $miJuego->getTitulo() . "</strong>";
 echo "<br>Precio: " . $miJuego->getPrecio() . " euros";
 echo "<br>Precio IVA incluido: " . $miJuego->getPrecioConIva() . " euros";
 $miJuego->muestraResumen();
+
+// parte uno funcional_comprovada
