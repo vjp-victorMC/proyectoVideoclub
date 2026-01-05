@@ -5,6 +5,9 @@ namespace Dwes\ProyectoVideoclub;
 use Dwes\ProyectoVideoclub\Util\SoporteYaAlquiladoException;
 use Dwes\ProyectoVideoclub\Util\CupoSuperadoException;
 use Dwes\ProyectoVideoclub\Util\SoporteNoEncontradoException;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+use Monolog\Level;
 
 class Cliente
 {
@@ -18,6 +21,7 @@ class Cliente
     // Nuevo: credenciales del cliente
     private $usuario;
     private $password;
+    private $logger;
 
     // Constructor (usuario y password opcionales para compatibilidad)
     public function __construct($nombre, $numero, $maxAlquilerConcurrente = 3, $usuario = null, $password = null)
@@ -27,6 +31,9 @@ class Cliente
         $this->maxAlquilerConcurrente = $maxAlquilerConcurrente;
         $this->usuario = $usuario;
         $this->password = $password; // en producción deberías almacenar solo hash
+        
+        $this->logger = new Logger('VideoclubLogger');
+        $this->logger->pushHandler(new StreamHandler(__DIR__ . '/../logs/videoclub.log', Level::Debug));
     }
     
     // geters y setters de numeros de clientes
@@ -74,16 +81,19 @@ class Cliente
     public function alquilar(Soporte $s) //creamos  un objeto soporte por parametro
     {
         if ($this->tieneAlquilado($s)) {
+            $this->logger->warning("El soporte ya está alquilado: " . $s->getTitulo());
             throw new SoporteYaAlquiladoException("Ya tienes alquilado: " . $s->getTitulo());
         }
 
         if (count($this->soportesAlquilados) >= $this->maxAlquilerConcurrente) {
+            $this->logger->warning("Cupo de alquileres superado. No puedes alquilar más de " . $this->maxAlquilerConcurrente . " soportes.");
             throw new CupoSuperadoException("No puedes alquilar más de " . $this->maxAlquilerConcurrente . " soportes.");
         }
 
         $this->soportesAlquilados[] = $s;
         $this->numSoportesAlquilados++;
         $s->alquilado = true;
+        $this->logger->info("Alquilado soporte: " . $s->getTitulo());
 
         return $this; // Encadenamiento
     }
@@ -97,9 +107,11 @@ class Cliente
                 unset($this->soportesAlquilados[$key]);
                 $this->numSoportesAlquilados--;
                 $this->soportesAlquilados = array_values($this->soportesAlquilados);
+                $this->logger->info("Devuelto soporte: " . $soporte->getTitulo());
                 return $this;
             }
         }
+        $this->logger->warning("No tienes alquilado el soporte número: $numSoporte");
         throw new SoporteNoEncontradoException("No tienes alquilado el soporte número: $numSoporte");
     }
 
@@ -107,13 +119,13 @@ class Cliente
     public function listaAlquileres()
     {
         $cantidad = count($this->soportesAlquilados);
-        echo "<br><br> $this->nombre tiene $cantidad soporte(s) alquilado(s):<br>";
+        $this->logger->info("$this->nombre tiene $cantidad soporte(s) alquilado(s):");
 
         if ($cantidad == 0) {
-            echo "No tiene ningún soporte alquilado.<br>";
+            $this->logger->info("No tiene ningún soporte alquilado.");
         } else {
             foreach ($this->soportesAlquilados as $soporte) {
-                echo "- " . $soporte->getTitulo() . " (Nº " . $soporte->getNumero() . ")<br>";
+                $this->logger->info("- " . $soporte->getTitulo() . " (Nº " . $soporte->getNumero() . ")");
             }
         }
     }

@@ -1,0 +1,6 @@
+[2026-01-05T20:23:07.968605+01:00] VideoclubLogger.INFO: Alquilado soporte: Test Tape [] []
+[2026-01-05T20:23:07.972149+01:00] VideoclubLogger.WARNING: El soporte ya está alquilado: Test Tape [] []
+[2026-01-05T20:23:07.973115+01:00] VideoclubLogger.INFO: Devuelto soporte: Test Tape [] []
+[2026-01-05T20:23:07.973207+01:00] VideoclubLogger.WARNING: No tienes alquilado el soporte número: 999 [] []
+[2026-01-05T20:23:07.973652+01:00] VideoclubLogger.INFO: LogTester tiene 0 soporte(s) alquilado(s): [] []
+[2026-01-05T20:23:07.973775+01:00] VideoclubLogger.INFO: No tiene ningún soporte alquilado. [] []
